@@ -1,6 +1,6 @@
 import 'package:cimb_growthhub_app/ui/login/controller/form_controller.dart';
 import 'package:cimb_growthhub_app/ui/login/login_screen.dart';
-import 'package:cimb_growthhub_app/ui/main/controller/menu_app_controller.dart';
+import 'package:cimb_growthhub_app/ui/main/controller/main_controller.dart';
 import 'package:cimb_growthhub_app/ui/main/main_screen.dart';
 import 'package:cimb_growthhub_app/ui/register/register_screen.dart';
 import 'package:cimb_growthhub_app/ui/training/training_screen.dart';
@@ -19,7 +19,7 @@ final router = GoRouter(
         child: MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              create: (context) => MenuAppController(),
+              create: (context) => MainController(),
             ),
           ],
           child: MainScreen(),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant.dart';
-import '../controller/menu_app_controller.dart';
+import '../controller/main_controller.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -20,7 +20,7 @@ class Header extends StatelessWidget {
         if (!Responsive.isDesktop(context))
           IconButton(
             icon: Icon(Icons.menu),
-            onPressed: context.read<MenuAppController>().controlMenu,
+            onPressed: context.read<MainController>().controlMenu,
           ),
         if (!Responsive.isMobile(context))
           Text(

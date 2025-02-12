@@ -60,6 +60,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(height: 15,),
                   CustomTextFormField(label: "No. Telepon", prefixIcon: Icon(Icons.call), formatter: [FilteringTextInputFormatter.digitsOnly],),
                   SizedBox(height: 15,),
+                  CustomTextFormField(label: "Tanggal Lahir", prefixIcon: Icon(Icons.date_range), formatter: [FilteringTextInputFormatter.digitsOnly], isDate: true,),
+                  SizedBox(height: 15,),
                   CustomTextFormField(label: "Pekerjaan", prefixIcon: Icon(Icons.work_outline)),
                   SizedBox(height: 15,),
                   CustomTextFormField(label: "Perusahaan", prefixIcon: Icon(Icons.home_work_outlined)),
