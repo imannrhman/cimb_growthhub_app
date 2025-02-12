@@ -21,6 +21,91 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: context.read<MainController>().scaffoldKey,
+      drawer: Drawer(
+        backgroundColor: Colors.white,
+        child: Column(
+          children: [
+            Expanded(child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: Column(
+                children: [
+                  SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircleAvatar(backgroundColor: Colors.grey)),
+                  SizedBox(height: 10,),
+                  Text("John Doe", style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),),
+                  SizedBox(height: 30,),
+                  ListTile(
+                    leading: Icon(Icons.home_filled),
+                    title: Text("Halaman Utama"),
+                    hoverColor: Colors.grey,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.person_2_rounded),
+                    title: Text("Profile"),
+                  )
+                ],
+              ),
+            )),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor:Color(0xFFEF3D3D),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), // Set the radius here
+                        ),
+                      ),
+                      onPressed: () {
+                        context.go("/login");
+                      },
+                      child: Text(
+                        'Login',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor:Color(0xFFEF3D3D),
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), // Set the radius here
+                        ),
+                      ),
+                      onPressed: () {
+                        context.go("/register");
+                      },
+                      child: Text(
+                        'Register',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+          ],
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Responsive(
         mobile: MainMobileScreen(),
@@ -153,7 +238,41 @@ class MainMobileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView();
+    return ListView(
+      children: [
+        AppBar(
+          leading: IconButton(onPressed: () {
+            context.read<MainController>().controlMenu();
+          }, icon: Icon(Icons.menu)),
+          title:  Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset("assets/images/cimb.png"))),
+              SizedBox(width: 10,),
+              Text(
+                "CIMB Growth Hub",
+                style: TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.w900),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.white,
+        ),
+        SizedBox(height: 20,),
+        MyTrainingContainer(name: "Training Ku!", color: Colors.redAccent, shadows: []),
+        SizedBox(height: 30,),
+        TrainingMobileContainer(),
+        SizedBox(
+          height: 100,
+        ),
+      ],
+    );
   }
 }
 
@@ -182,7 +301,7 @@ class MyTrainingContainer extends StatelessWidget {
     int length = 10;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 80),
+      margin: Responsive.isMobile(context) ? const EdgeInsets.symmetric(horizontal: 16) : const EdgeInsets.symmetric(horizontal: 80),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: BoxDecoration(
           color: Colors.redAccent, borderRadius: BorderRadius.circular(30)),
@@ -196,7 +315,7 @@ class MyTrainingContainer extends StatelessWidget {
               children: [
                 Icon(
                   Icons.chrome_reader_mode_outlined,
-                  size: 25,
+                  size: Responsive.isMobile(context) ? 20 : 25,
                   color: Colors.white,
                 ),
                 SizedBox(
@@ -205,7 +324,7 @@ class MyTrainingContainer extends StatelessWidget {
                 Text(
                   name,
                   style: GoogleFonts.plusJakartaSans(
-                      fontSize: 25, fontWeight: FontWeight.w600, color: color),
+                      fontSize: Responsive.isMobile(context) ? 20 : 25, fontWeight: FontWeight.w600, color: Colors.white),
                 ),
               ],
             ),
@@ -268,7 +387,7 @@ class MyTrainingContainer extends StatelessWidget {
                         ),
                         child: Icon(
                           Icons.keyboard_arrow_left_outlined,
-                          size: 40,
+                          size: Responsive.isMobile(context) ? 30 : 40,
                           color: Colors.redAccent,
                         ),
                       ),
@@ -290,7 +409,7 @@ class MyTrainingContainer extends StatelessWidget {
                         ),
                         child: Icon(
                           Icons.keyboard_arrow_right_outlined,
-                          size: 40,
+                          size: Responsive.isMobile(context) ? 30 : 40,
                           color: Colors.redAccent,
                         ),
                       ),
@@ -389,6 +508,88 @@ class TrainingContainer extends StatelessWidget {
     );
   }
 }
+
+class TrainingMobileContainer extends StatelessWidget {
+  const TrainingMobileContainer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "List Training",
+            style: GoogleFonts.plusJakartaSans(
+                fontSize: 25, fontWeight: FontWeight.w600),
+          ),
+          SizedBox(height: 10,),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: TextFormField(
+              cursorColor: Colors.grey,
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  prefixIcon: Icon(Icons.search),
+                  prefixIconColor: Colors.black87,
+                  focusColor: Colors.black87,
+                  suffixIconColor: Colors.black87,
+                  hintText: "Search...",
+                  hintStyle: TextStyle(
+                    color: Color(0xFFDADADA),
+                    fontStyle: FontStyle.italic,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      borderSide: BorderSide(
+                        strokeAlign: 0,
+                        color: Color(0xFFEAEAEA),
+                      )),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.black87,
+                      )),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      borderSide: BorderSide(
+                        strokeAlign: 0,
+                        color: Colors.black87,
+                      ))),
+            ),
+          ),
+
+          SizedBox(
+            height: 20,
+          ),
+          ListView.separated(
+              shrinkWrap: true,
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return SizedBox(
+                    height: 300,
+                    child: TrainingCardView());
+              }, separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 10,);
+          },
+
+              )
+        ],
+      ),
+    );
+  }
+}
+
 
 class TrainingCardView extends StatelessWidget {
   const TrainingCardView({super.key});
