@@ -1,3 +1,6 @@
+import 'package:cimb_growthhub_app/bloc/my_training/my_training_bloc.dart';
+import 'package:cimb_growthhub_app/bloc/training/training_bloc.dart';
+import 'package:cimb_growthhub_app/model/response/user_profile.dart';
 import 'package:cimb_growthhub_app/responsive.dart';
 import 'package:cimb_growthhub_app/ui/login/component/custom_text_field.dart';
 import 'package:cimb_growthhub_app/ui/main/component/side_menu.dart';
@@ -7,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 class MainScreen extends StatefulWidget {
@@ -145,7 +150,9 @@ class MainWebScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Row(
+
+                if (!context.watch<MainController>().isLogin)
+                   Row(
                   children: [
                     SizedBox(
                       width: 100,
@@ -192,13 +199,22 @@ class MainWebScreen extends StatelessWidget {
                     )
                   ],
                 ),
-              ],
+
+                if (context.watch<MainController>().isLogin)
+                  Row(children: [
+                    CircleAvatar(backgroundColor: Colors.amber,),
+                    SizedBox(width: 20,),
+                    Text("Hallo, ${context.watch<MainController>().profile?.profile.nama ?? ""}!"),
+
+                  ],)
+               ],
             ),
           ),
           SizedBox(
             height: 100,
           ),
-          SizedBox(
+          if (context.watch<MainController>().isLogin) 
+            SizedBox(
             height: 400,
             child: Row(
               children: [
@@ -220,6 +236,7 @@ class MainWebScreen extends StatelessWidget {
               ],
             ),
           ),
+           
           SizedBox(
             height: 100,
           ),
@@ -491,9 +508,17 @@ class TrainingContainer extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          GridView.builder(
+          BlocBuilder<TrainingBloc, TrainingState>(builder: (context, state) {
+            
+            if (state is TrainingLoading) {
+              return Center(
+                child: LoadingAnimationWidget.dotsTriangle(color: Colors.redAccent, size: 20),
+              );
+            }
+            if (state is TrainingLoaded) {
+              return GridView.builder(
               shrinkWrap: true,
-              itemCount: 10,
+              itemCount: state.data.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: Responsive.isDesktop(context) ? 4 : 3,
                 mainAxisExtent: 300,
@@ -501,8 +526,29 @@ class TrainingContainer extends StatelessWidget {
                 crossAxisSpacing: 20, // Set fixed height for each item
               ),
               itemBuilder: (context, index) {
-                return TrainingCardView();
-              })
+                return TouchableOpacity(
+                  onTap: () {
+                    if (context.watch<MainController>().isLogin) {
+                      context.go("/training", extra: state.data[index].id);
+                    } else {
+                      context.go("/login");
+                    }
+                  },
+                  child: TrainingCardView(
+                    trainingName: state.data[index].nama,
+                    trainerName: state.data[index].namaTrainer,
+                    duration: state.data[index].durasi.toString(),
+                    date:DateFormat("dd MMM yyyy").format(state.data[index].tanggal),
+                  ),
+                );
+              });
+            }
+
+            if (state is TrainingError) {
+              return Text(state.error);
+            }
+            return Container();
+          })
         ],
       ),
     );
@@ -578,7 +624,9 @@ class TrainingMobileContainer extends StatelessWidget {
               itemBuilder: (context, index) {
                 return SizedBox(
                     height: 300,
-                    child: TrainingCardView());
+                    child: TrainingCardView(
+                      
+                    ));
               }, separatorBuilder: (BuildContext context, int index) {
                 return SizedBox(height: 10,);
           },
@@ -592,7 +640,12 @@ class TrainingMobileContainer extends StatelessWidget {
 
 
 class TrainingCardView extends StatelessWidget {
-  const TrainingCardView({super.key});
+  final String? trainingName;
+  final String? trainerName;
+  final String? duration;
+  final String? date;
+
+  const TrainingCardView({super.key, this.trainingName, this.trainerName, this.duration, this.date});
 
   @override
   Widget build(BuildContext context) {
@@ -631,14 +684,14 @@ class TrainingCardView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Test Training",
+                  trainingName ?? "Test Training",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
-                  "Nama Trainer",
+                  trainerName ?? "Nama Trainer",
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -654,7 +707,7 @@ class TrainingCardView extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      "120 menit",
+                      "${duration ?? 0} menit",
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
@@ -672,7 +725,7 @@ class TrainingCardView extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      "12 Februari 2025",
+                      date ?? "12 Februari 2025",
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w500,

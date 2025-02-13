@@ -15,8 +15,22 @@ final class TrainingLoading extends TrainingState {
 }
 
 final class TrainingLoaded extends TrainingState {
+  final List<TrainingData> data;
+
+  const TrainingLoaded({required this.data});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [data];
+
+}
+
+final class TrainingDetailLoaded extends TrainingState {
+  final TrainingData data;
+
+  const TrainingDetailLoaded({required this.data});
+  
+  @override
+  List<Object?> get props => [data];
 
 }
 

@@ -37,14 +37,12 @@ final class AuthLoginError extends AuthState {
 
 
 final class AuthRegisterSuccess extends AuthState {
-  final LoginResponse login;
+  
 
-  const AuthRegisterSuccess({
-    required this.login,
-  });
+  const AuthRegisterSuccess();
 
   @override
-  List<Object> get props => [login]; 
+  List<Object> get props => []; 
 }
 
 final class AuthRegisterError extends AuthState{

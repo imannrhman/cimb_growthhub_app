@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:cimb_growthhub_app/bloc/detail_training/detail_training_bloc.dart';
 import 'package:cimb_growthhub_app/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 class TrainingScreen extends StatefulWidget {
@@ -22,7 +25,9 @@ class _TrainingScreenState extends State<TrainingScreen> {
         onRefresh: () {
           return Completer().future;
         },
-        child: CustomScrollView(
+        child: BlocBuilder(builder: (context, state) {
+          if (state is DetailTrainingLoaded) {
+            return CustomScrollView(
           slivers: [
             SliverAppBar(
               leading: Padding(
@@ -129,8 +134,15 @@ class _TrainingScreenState extends State<TrainingScreen> {
               ),
             )
           ],
-        ),
-      )),
+        );
+
+          }
+          return Center(
+            child: LoadingAnimationWidget.progressiveDots(color: Colors.redAccent, size: 30),
+          );
+
+
+        }))),
     );
   }
 }

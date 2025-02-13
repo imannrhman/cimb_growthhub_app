@@ -7,7 +7,7 @@ String responseToJson(ResponseData data) => json.encode(data.toJson());
 class ResponseData{
     bool success;
     String message;
-    Map<String, dynamic> data;
+    dynamic data;
 
     ResponseData({
         required this.success,

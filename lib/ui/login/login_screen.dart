@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     CustomTextFormField(controller: context.read<FormController>().usernameTextEditingController,label: "Username", prefixIcon: Icon(Icons.person_2_outlined)),
                     SizedBox(height: 15,),
-                    CustomTextFormField(controller: context.read<FormController>().usernameTextEditingController, label: "Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true,),
+                    CustomTextFormField(controller: context.read<FormController>().passwordTextEditingController, label: "Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true,),
                     SizedBox(height: 30,),
                     BlocBuilder<AuthBloc, AuthState
                     >(builder: (context,state) =>  SizedBox(
