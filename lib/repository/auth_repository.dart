@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cimb_growthhub_app/model/response/login.dart';
 import 'package:cimb_growthhub_app/model/response/response.dart';
 import 'package:cimb_growthhub_app/ui/login/login_screen.dart';
@@ -15,7 +17,7 @@ class AuthRepositoryAPI implements AuthRepository {
 
   @override
   Future<LoginResponse> login({required String email, required String password}) async {
-      Response response =  await request.post('/login', data: {
+      Response response =  await request.get('/login', data: {
         'email': email,
         'password': password
       });

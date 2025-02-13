@@ -3,10 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Network {
-
+  static String baseUrl() {
+    String baseUrl = dotenv.env['BASE_URL'] ?? "";
+    return baseUrl;
+  }
   static Dio networkDio() {
     String baseUrl = dotenv.env['BASE_URL'] ?? "";
-    print(baseUrl);
+
     final options = BaseOptions(
       baseUrl: baseUrl,
     );

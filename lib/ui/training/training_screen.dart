@@ -53,7 +53,7 @@ class _TrainingScreenState extends State<TrainingScreen> {
                     ).createShader(bounds);
                   },
                   child: Image.network(
-                    "https://picsum.photos/250?image=9",
+                    "https://picsum.photos/seed/picsum/300/300",
                     opacity: const AlwaysStoppedAnimation(.25),
                     fit: BoxFit.cover,
                   ),

@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
-    TextEditingController _username = TextEditingController();
+    TextEditingController username = TextEditingController();
     TextEditingController _password = TextEditingController();
     return BlocProvider<AuthBloc>(create: (context) => AuthBloc(AuthRepositoryAPI()),
       child: BlocListener<AuthBloc, AuthState>(
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 40,
                       child: TextButton(
                         onPressed: state is AuthLoading ?  null : () {
-                          context.read<AuthBloc>().add(PostLogin(email: _username.text, password: _password.text));
+                          context.read<AuthBloc>().add(PostLogin(email: "test", password: "password"));
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.redAccent,

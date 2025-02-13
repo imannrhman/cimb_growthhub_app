@@ -23,10 +23,10 @@ final router = GoRouter(
         child: MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              create: (context) => FormController(),
+              create: (context) => MainController(),
             ),
           ],
-          child: ProfileScreen(),
+          child: MainScreen(),
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(opacity: animation, child: child),
