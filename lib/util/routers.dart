@@ -1,3 +1,5 @@
+import 'package:cimb_growthhub_app/bloc/auth/auth_bloc.dart';
+import 'package:cimb_growthhub_app/repository/auth_repository.dart';
 import 'package:cimb_growthhub_app/ui/login/controller/form_controller.dart';
 import 'package:cimb_growthhub_app/ui/login/login_screen.dart';
 import 'package:cimb_growthhub_app/ui/main/controller/main_controller.dart';
@@ -54,13 +56,16 @@ final router = GoRouter(
       path: '/login',
       pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
-        child: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (context) => FormController(),
-            ),
-          ],
-          child: LoginScreen(),
+        child: BlocProvider(create: (context) => AuthBloc(AuthRepositoryAPI()),
+          child: MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => FormController(),
+              ),
+            ],
+            child: LoginScreen()
+            
+          ),
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(opacity: animation, child: child),

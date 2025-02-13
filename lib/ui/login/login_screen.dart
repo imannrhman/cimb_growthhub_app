@@ -1,6 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cimb_growthhub_app/bloc/auth/auth_bloc.dart';
+import 'package:cimb_growthhub_app/repository/auth_repository.dart';
 import 'package:cimb_growthhub_app/ui/login/controller/form_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
@@ -16,79 +21,112 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SizedBox(
-            width: 350,
-            child: ListView(
-              children: [
-                SizedBox(
-                  height: 200,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                        SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Image.asset("assets/images/cimb.png")),
-                    Text("CIMB Growth Hub",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20
-                      ),
-                    ),
-                    SizedBox(height: 15,),
-                    Text("Login",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 30
-                      ),
-                    ),
-                      ],
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                CustomTextFormField(label: "Username", prefixIcon: Icon(Icons.person_2_outlined)),
-                SizedBox(height: 15,),
-                CustomTextFormField(label: "Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true,),
-                SizedBox(height: 30,),
-                SizedBox(
-                  height: 40,
-                  child: TextButton(
-                    onPressed: () {
-                      // Button action
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15), // Set the radius here
-                      ),
-                    ),
-                    child: Text('LOGIN', style: TextStyle(fontWeight: FontWeight.w600),),
+
+    TextEditingController _username = TextEditingController();
+    TextEditingController _password = TextEditingController();
+    return BlocProvider<AuthBloc>(create: (context) => AuthBloc(AuthRepositoryAPI()),
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+            if (state is AuthRegisterError) {
+              SnackBar snackBar = SnackBar(
+                  /// need to set following properties for best effect of awesome_snackbar_content
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Colors.transparent,
+
+                  content: AwesomeSnackbarContent(
+                    title: 'On Snap!',
+                    message: state.message,
+                  
+
+                    /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                    contentType: ContentType.failure,
                   ),
-                ),
-                SizedBox(height: 20,),
-                Row(
+                );
+
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(snackBar);
+
+                print(state.message);
+            }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Center(
+              child: SizedBox(
+                width: 350,
+                child: ListView(
                   children: [
-                    Text("Tidak Memiliki Akun ? "),
-                    TouchableOpacity(
-                      onTap: () {
-                        context.go("/register");
-                      },
-                      child: Text("Register",
-                        style: TextStyle(
-                          color: Colors.redAccent
+                    SizedBox(
+                      height: 200,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                            SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: Image.asset("assets/images/cimb.png")),
+                        Text("CIMB Growth Hub",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20
+                          ),
                         ),
+                        SizedBox(height: 15,),
+                        Text("Login",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 30
+                          ),
+                        ),
+                          ],
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    CustomTextFormField(label: "Username", prefixIcon: Icon(Icons.person_2_outlined)),
+                    SizedBox(height: 15,),
+                    CustomTextFormField(label: "Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true,),
+                    SizedBox(height: 30,),
+                    BlocBuilder<AuthBloc, AuthState
+                    >(builder: (context,state) =>  SizedBox(
+                      height: 40,
+                      child: TextButton(
+                        onPressed: state is AuthLoading ?  null : () {
+                          context.read<AuthBloc>().add(PostLogin(email: _username.text, password: _password.text));
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15), // Set the radius here
+                          ),
+                        ),
+                        child: state is AuthLoading ? LoadingAnimationWidget.inkDrop(color: Colors.white, size: 20) : Text('LOGIN', style: TextStyle(fontWeight: FontWeight.w600),),
                       ),
+                    ),),
+                    SizedBox(height: 20,),
+                    Row(
+                      children: [
+                        Text("Tidak Memiliki Akun ? "),
+                        TouchableOpacity(
+                          onTap: () {
+                            context.go("/register");
+                          },
+                          child: Text("Register",
+                            style: TextStyle(
+                              color: Colors.redAccent
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

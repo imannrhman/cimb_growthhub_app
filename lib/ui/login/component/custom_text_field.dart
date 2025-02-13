@@ -11,11 +11,13 @@ class CustomTextFormField extends StatelessWidget {
   final bool isDate;
   final PasswordType passwordType;
   final List<TextInputFormatter>? formatter;
-
+  final TextEditingController? controller;
   final double? width;
 
-  const CustomTextFormField({super.key, required this.label, required this.prefixIcon,  this.isPassword = false, this.formatter,  this.passwordType = PasswordType.password, this.isDate = false, this.width});
-  const CustomTextFormField({super.key, required this.label, required this.prefixIcon,  this.isPassword = false, this.formatter,  this.passwordType = PasswordType.password, this.isDate = false});
+
+
+  const CustomTextFormField({super.key, required this.label, required this.prefixIcon,  this.isPassword = false, this.formatter,  this.passwordType = PasswordType.password, this.isDate = false, this.width, this.controller});
+
 
 
   bool showPassword(BuildContext context) {
@@ -47,6 +49,7 @@ class CustomTextFormField extends StatelessWidget {
 
                 },
                 child: TextFormField(
+                  controller: controller,
                   onTap: () {
 
                   },
