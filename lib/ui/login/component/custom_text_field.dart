@@ -12,6 +12,9 @@ class CustomTextFormField extends StatelessWidget {
   final PasswordType passwordType;
   final List<TextInputFormatter>? formatter;
 
+  final double? width;
+
+  const CustomTextFormField({super.key, required this.label, required this.prefixIcon,  this.isPassword = false, this.formatter,  this.passwordType = PasswordType.password, this.isDate = false, this.width});
   const CustomTextFormField({super.key, required this.label, required this.prefixIcon,  this.isPassword = false, this.formatter,  this.passwordType = PasswordType.password, this.isDate = false});
 
 
@@ -29,7 +32,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 350,
+        width: width ?? 350,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

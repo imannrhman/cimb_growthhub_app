@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../ui/profile/profile_screen.dart';
+
 final router = GoRouter(
   routes: [
     GoRoute(
@@ -19,10 +21,10 @@ final router = GoRouter(
         child: MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              create: (context) => MainController(),
+              create: (context) => FormController(),
             ),
           ],
-          child: MainScreen(),
+          child: ProfileScreen(),
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(opacity: animation, child: child),
