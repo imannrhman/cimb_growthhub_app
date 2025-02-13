@@ -15,3 +15,15 @@ final class PostLogin extends AuthEvent {
   List<Object> get props => [email, password];
   
 }
+
+
+final class PostRegister extends AuthEvent {
+
+  final RegisterForm form;
+
+  const PostRegister({required this.form});
+
+  @override
+  List<Object?> get props => [form];
+
+}

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:cimb_growthhub_app/model/response/user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainController extends ChangeNotifier {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -17,6 +21,12 @@ class MainController extends ChangeNotifier {
 
   double _scrollIndex = 300;
   double get scrollIndex => _scrollIndex;
+
+  bool _isLogin = false;
+  bool get isLogin => _isLogin;
+
+  UserProfile? _profile;
+  UserProfile? get profile => _profile;
 
   void controlMenu() {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
@@ -82,7 +92,26 @@ class MainController extends ChangeNotifier {
     }
   }
 
+void checkLogin() {
+  SharedPreferences.getInstance().then((value) {
+    String? token = value.getString("token");
+    if (token != null) {
+      _isLogin = true;
+      notifyListeners();
+    } else {
+      _isLogin = false;
+      notifyListeners();
+    }
 
+     String? userProfile = value.getString("profile");
+     if (userProfile != null ) {
+        _profile = UserProfile.fromJson(jsonDecode(userProfile));
+     }
+  });
+}
+
+
+  
 
 
 

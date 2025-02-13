@@ -1,5 +1,8 @@
 import 'package:cimb_growthhub_app/bloc/auth/auth_bloc.dart';
+import 'package:cimb_growthhub_app/bloc/my_training/my_training_bloc.dart';
+import 'package:cimb_growthhub_app/bloc/training/training_bloc.dart';
 import 'package:cimb_growthhub_app/repository/auth_repository.dart';
+import 'package:cimb_growthhub_app/repository/training_repository.dart';
 import 'package:cimb_growthhub_app/ui/login/controller/form_controller.dart';
 import 'package:cimb_growthhub_app/ui/login/login_screen.dart';
 import 'package:cimb_growthhub_app/ui/main/controller/main_controller.dart';
@@ -23,19 +26,27 @@ final router = GoRouter(
         child: MultiProvider(
           providers: [
             ChangeNotifierProvider(
-              create: (context) => MainController(),
+              create: (context) => MainController()..checkLogin(),
             ),
           ],
-          child: MainScreen(),
+          child: MultiBlocProvider(
+            providers: [
+                BlocProvider<MyTrainingBloc>(create: (context) => MyTrainingBloc()..add(GetMyTrainingData()),),
+                BlocProvider<TrainingBloc>(create: (context) => TrainingBloc(TrainingRepositoryAPI())..add(GetTrainingData()),)
+            ],
+            child: MainScreen()),
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(opacity: animation, child: child),
       ),
-      routes: [
-        GoRoute(
+    ),
+
+       GoRoute(
           name: 'training',
           path: '/training',
-          pageBuilder: (context, state) => CustomTransitionPage(
+          pageBuilder: (context, state) {
+            String id = "id";
+            return CustomTransitionPage(
             key: state.pageKey,
             child: MultiProvider(
               providers: [
@@ -43,14 +54,19 @@ final router = GoRouter(
                   create: (context) => FormController(),
                 ),
               ],
-              child: TrainingScreen(),
+              child: MultiBlocProvider(providers: [
+                 BlocProvider<TrainingBloc>(create: (context) => TrainingBloc(TrainingRepositoryAPI())..add(GetTrainingDataByID(
+                  id: id
+                 )),)
+              ], child: TrainingScreen()
+              ),
             ),
             transitionsBuilder: (context, animation, secondaryAnimation, child) =>
                 FadeTransition(opacity: animation, child: child),
-          ),
+          );
+          },
         ),
-      ]
-    ),
+      
     GoRoute(
       name: 'login',
       path: '/login',
@@ -82,7 +98,9 @@ final router = GoRouter(
               create: (context) => FormController(),
             ),
           ],
-          child: RegisterScreen(),
+          child: BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc(AuthRepositoryAPI()),
+            child: RegisterScreen()),
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(opacity: animation, child: child),

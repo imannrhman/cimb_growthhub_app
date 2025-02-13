@@ -12,6 +12,11 @@ class Network {
 
     final options = BaseOptions(
       baseUrl: baseUrl,
+      contentType: "application/json",
+      headers: {
+        "Accept" : "application/json",
+        "Content-Type" : "application/json"
+      }
     );
     return Dio(options);
   }

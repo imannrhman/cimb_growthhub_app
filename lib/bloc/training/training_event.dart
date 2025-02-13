@@ -9,3 +9,15 @@ final class GetTrainingData extends TrainingEvent {
   List<Object?> get props => [];
 
 }
+
+
+final class GetTrainingDataByID extends TrainingEvent {
+  final String id;
+
+  const GetTrainingDataByID({required this.id});
+
+
+  @override
+  List<Object?> get props => [id];
+
+}

@@ -28,3 +28,10 @@ final class MyTrainingError extends MyTrainingState {
   List<Object?> get props => [];
 
 }
+
+final class MyTrainingNotLogged extends MyTrainingState {
+  
+  @override
+  List<Object?> get props => [];
+
+}
