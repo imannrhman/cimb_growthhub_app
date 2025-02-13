@@ -1,6 +1,10 @@
+import 'package:cimb_growthhub_app/bloc/auth/auth_bloc.dart';
+import 'package:cimb_growthhub_app/model/request/register.dart';
 import 'package:cimb_growthhub_app/ui/login/component/custom_text_field.dart';
+import 'package:cimb_growthhub_app/ui/login/controller/form_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,6 +17,16 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
+
+    TextEditingController name = context.read<FormController>().nameTextEditingContoller;
+    TextEditingController email = context.read<FormController>().nameTextEditingContoller;
+    TextEditingController username = context.read<FormController>().usernameTextEditingController;
+    TextEditingController phone = context.read<FormController>().phoneTextEditingController;
+    TextEditingController job = context.read<FormController>().jobTextEditingContoller;
+    TextEditingController office = context.read<FormController>().offficeTextEditingContoller;
+    TextEditingController password = context.read<FormController>().passwordTextEditingController;
+    TextEditingController konfirmasi = context.read<FormController>().konfirmPasswordTextEditingController;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -52,23 +66,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     height: 40,
                   ),
-                  CustomTextFormField(label: "Nama Lengkap", prefixIcon: Icon(Icons.abc_outlined)),
+                  CustomTextFormField(controller: name,label: "Nama Lengkap", prefixIcon: Icon(Icons.abc_outlined)),
                   SizedBox(height: 15,),
-                  CustomTextFormField(label: "Username", prefixIcon: Icon(Icons.person_2_outlined)),
+                  CustomTextFormField(controller: username , label: "Username", prefixIcon: Icon(Icons.person_2_outlined)),
                   SizedBox(height: 15,),
-                  CustomTextFormField(label: "Email", prefixIcon: Icon(Icons.email_outlined)),
+                  CustomTextFormField(controller: email, label: "Email", prefixIcon: Icon(Icons.email_outlined)),
                   SizedBox(height: 15,),
-                  CustomTextFormField(label: "No. Telepon", prefixIcon: Icon(Icons.call), formatter: [FilteringTextInputFormatter.digitsOnly],),
+                  CustomTextFormField(controller: phone, label: "No. Telepon", prefixIcon: Icon(Icons.call), formatter: [FilteringTextInputFormatter.digitsOnly],),
                   SizedBox(height: 15,),
-                  CustomTextFormField(label: "Tanggal Lahir", prefixIcon: Icon(Icons.date_range), formatter: [FilteringTextInputFormatter.digitsOnly], isDate: true,),
+                  CustomTextFormField(label:  "Tanggal Lahir", prefixIcon: Icon(Icons.date_range), formatter: [FilteringTextInputFormatter.digitsOnly], isDate: true,),
                   SizedBox(height: 15,),
-                  CustomTextFormField(label: "Pekerjaan", prefixIcon: Icon(Icons.work_outline)),
+                  CustomTextFormField(controller: job, label: "Pekerjaan", prefixIcon: Icon(Icons.work_outline)),
                   SizedBox(height: 15,),
-                  CustomTextFormField(label: "Perusahaan", prefixIcon: Icon(Icons.home_work_outlined)),
+                  CustomTextFormField(controller: office,label: "Perusahaan", prefixIcon: Icon(Icons.home_work_outlined)),
                   SizedBox(height: 15,),
-                  CustomTextFormField(label: "Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true,),
+                  CustomTextFormField(controller: password, label: "Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true,),
                   SizedBox(height: 15,),
-                  CustomTextFormField(label: "Konfirmasi Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true, passwordType: PasswordType.confirmPassword,),
+                  CustomTextFormField(controller: konfirmasi ,label: "Konfirmasi Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true, passwordType: PasswordType.confirmPassword,),
                   SizedBox(height: 30,),
                   SizedBox(
                     height: 40,
@@ -92,7 +106,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Text("Sudah Memiliki Akun ? "),
                       TouchableOpacity(
                         onTap: () {
-            
+                          context.read<AuthBloc>().add(PostRegister(form: RegisterForm(
+                            username: username.text, 
+                            password: password.text, 
+                            nama: name.text, 
+                            tglLahir: DateTime.now(), 
+                            pekerjaan: job.text, 
+                            perusahaan: office.text, 
+                            noTelepon:phone.text,
+                             email: email.text
+                             )));            
                         },
                         child: Text("Login",
                           style: TextStyle(

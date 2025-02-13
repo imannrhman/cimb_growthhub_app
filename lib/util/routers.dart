@@ -80,7 +80,9 @@ final router = GoRouter(
               create: (context) => FormController(),
             ),
           ],
-          child: RegisterScreen(),
+          child: BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc(AuthRepositoryAPI()),
+            child: RegisterScreen()),
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(opacity: animation, child: child),

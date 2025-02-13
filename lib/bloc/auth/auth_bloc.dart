@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:cimb_growthhub_app/model/response/error.dart';
 import 'package:cimb_growthhub_app/model/response/login.dart';
 import 'package:cimb_growthhub_app/repository/auth_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 
 part 'auth_event.dart';
@@ -21,7 +23,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       print(response);
       emit(AuthLoginSuccess(login: response));
     } catch (e) {
-      emit(AuthRegisterError(message: e.toString()));
+      if (e is DioException) {
+         ErrorData errorData = errorDataFromJson(e.response?.data ?? {});
+ 
+         emit(AuthLoginError(error: errorData.message ));
+      } else {
+        emit(AuthLoginError(error: "Terjadi Kesala, Mohon coba kembali"));
+      }
     }
   }
 }

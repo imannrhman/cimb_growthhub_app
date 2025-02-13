@@ -22,12 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
-    TextEditingController _username = TextEditingController();
-    TextEditingController _password = TextEditingController();
+    TextEditingController username = context.read<FormController>().usernameTextEditingController;
+    TextEditingController password = context.read<FormController>().passwordTextEditingController;
+    
     return BlocProvider<AuthBloc>(create: (context) => AuthBloc(AuthRepositoryAPI()),
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-            if (state is AuthRegisterError) {
+            if (state is AuthLoginError) {
               SnackBar snackBar = SnackBar(
                   /// need to set following properties for best effect of awesome_snackbar_content
                   elevation: 0,
@@ -36,8 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   content: AwesomeSnackbarContent(
                     title: 'On Snap!',
-                    message: state.message,
-                  
+                    message: state.error,
+                
 
                     /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
                     contentType: ContentType.failure,
@@ -47,8 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(snackBar);
+              
+            } 
 
-                print(state.message);
+            if (state is AuthLoginSuccess) {
+              context.pushReplacementNamed("main");
             }
         },
         child: Scaffold(
@@ -87,16 +91,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: 40,
                     ),
-                    CustomTextFormField(label: "Username", prefixIcon: Icon(Icons.person_2_outlined)),
+                    CustomTextFormField(controller: context.read<FormController>().usernameTextEditingController,label: "Username", prefixIcon: Icon(Icons.person_2_outlined)),
                     SizedBox(height: 15,),
-                    CustomTextFormField(label: "Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true,),
+                    CustomTextFormField(controller: context.read<FormController>().usernameTextEditingController, label: "Password", prefixIcon: Icon(Icons.lock_outline), isPassword: true,),
                     SizedBox(height: 30,),
                     BlocBuilder<AuthBloc, AuthState
                     >(builder: (context,state) =>  SizedBox(
                       height: 40,
                       child: TextButton(
                         onPressed: state is AuthLoading ?  null : () {
-                          context.read<AuthBloc>().add(PostLogin(email: _username.text, password: _password.text));
+                          context.read<AuthBloc>().add(PostLogin(email: username.text, password: password.text));
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.redAccent,
