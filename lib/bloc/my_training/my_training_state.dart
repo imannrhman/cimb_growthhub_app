@@ -15,8 +15,12 @@ final class MyTrainingLoading extends MyTrainingState {
 }
 
 final class MyTrainingLoaded extends MyTrainingState {
+  final List<Enrollment> enrollments;
+
+  const MyTrainingLoaded(this.enrollments);
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [enrollments];
 
 }
 

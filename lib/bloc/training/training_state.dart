@@ -34,6 +34,42 @@ final class TrainingDetailLoaded extends TrainingState {
 
 }
 
+final class TrainingEnrollLLoaded extends TrainingState {
+  final TrainingData trainingData;
+  final Enrollment enrollmentData;
+
+  const TrainingEnrollLLoaded({required this.trainingData, required this.enrollmentData});
+
+
+  @override
+  List<Object?> get props => [trainingData, enrollmentData];
+
+}
+
+final class TrainingEnrollLSuccess extends TrainingState {
+  final TrainingData trainingData;
+  final Enrollment enrollmentData;
+
+  const TrainingEnrollLSuccess({required this.trainingData, required this.enrollmentData});
+
+
+  @override
+  List<Object?> get props => [trainingData, enrollmentData];
+
+}
+
+final class TrainingCancelSuccess extends TrainingState {
+  final String id;
+  final String message;
+
+  const TrainingCancelSuccess(this.message, this.id);
+
+
+  @override
+  List<Object?> get props => [message];
+
+}
+
 final class TrainingError extends TrainingState {
   final String error;
 

@@ -11,20 +11,24 @@ class FormController extends ChangeNotifier {
   TextEditingController get usernameTextEditingController => _usernameTextEditingContoller;
 
   TextEditingController _nameTextEditingContoller = TextEditingController();
-  TextEditingController get nameTextEditingContoller => _nameTextEditingContoller; 
+  TextEditingController get nameTextEditingController => _nameTextEditingContoller;
 
 
   TextEditingController _emailTextEditingContoller = TextEditingController();
-  TextEditingController get emailTextEditingContoller => _emailTextEditingContoller; 
+  TextEditingController get emailTextEditingController => _emailTextEditingContoller;
+
+  TextEditingController _dateTextEditingController = TextEditingController();
+  TextEditingController get dateTextEditingController => _dateTextEditingController;
+
 
   DateTime _date = DateTime.now();
   DateTime get date => _date; 
 
   TextEditingController _jobTextEditingContoller = TextEditingController();
-  TextEditingController get jobTextEditingContoller => _jobTextEditingContoller; 
+  TextEditingController get jobTextEditingController => _jobTextEditingContoller;
 
   TextEditingController _officeTextEditingContoller = TextEditingController();
-  TextEditingController get offficeTextEditingContoller => _officeTextEditingContoller; 
+  TextEditingController get officeTextEditingController => _officeTextEditingContoller;
 
   TextEditingController _phoneTextEditingController = TextEditingController();
   TextEditingController get phoneTextEditingController => _phoneTextEditingController; 
@@ -45,6 +49,11 @@ TextEditingController get konfirmPasswordTextEditingController => _konfirmPasswo
 
   void showConfirmPassword() {
     _confirmPasswordVisible = !_confirmPasswordVisible;
+    notifyListeners();
+  }
+
+  void changeDate(DateTime dateTime) {
+    _date = dateTime;
     notifyListeners();
   }
 }

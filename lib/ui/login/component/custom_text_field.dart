@@ -13,10 +13,11 @@ class CustomTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? formatter;
   final TextEditingController? controller;
   final double? width;
+  final ValueChanged<DateTime?>? onDataChanged;
 
 
 
-  const CustomTextFormField({super.key, required this.label, required this.prefixIcon,  this.isPassword = false, this.formatter,  this.passwordType = PasswordType.password, this.isDate = false, this.width, this.controller});
+  const CustomTextFormField({super.key, required this.label, required this.prefixIcon,  this.isPassword = false, this.formatter,  this.passwordType = PasswordType.password, this.isDate = false, this.width, this.controller,  this.onDataChanged});
 
 
 
@@ -43,77 +44,77 @@ class CustomTextFormField extends StatelessWidget {
               height: 7,
             ),
             SizedBox(
-              child: TouchableOpacity(
+              child: TextFormField(
+                controller: controller,
                 onTap: () {
-                  showDatePicker(context: context, firstDate: DateTime.now().copyWith(year: 1900), lastDate: DateTime.now());
-
+                  if (isDate) {
+                    showDatePicker(context: context, firstDate: DateTime.now().copyWith(year: 1900), lastDate: DateTime.now())
+                        .then((value) {
+                      onDataChanged!(value);
+                    });
+                  }
                 },
-                child: TextFormField(
-                  controller: controller,
-                  onTap: () {
+                onTapAlwaysCalled: true,
+                cursorColor: Colors.grey,
+                obscureText: showPassword(context),
+                inputFormatters: formatter,
+                decoration: InputDecoration(
+                    filled: true,
 
-                  },
-                  cursorColor: Colors.grey,
-                  obscureText: showPassword(context),
-                  inputFormatters: formatter,
-                  decoration: InputDecoration(
-                      filled: true,
-                      enabled: !isDate,
-                      fillColor: Color(0xFFF5F5F5),
-                      prefixIcon: prefixIcon,
-                      prefixIconColor: Colors.grey,
-                      focusColor: Colors.grey,
-                      suffixIconColor: Colors.grey,
-                      hintText: isDate ? "dd/MM/yyyy" : label,
-                      hintStyle: TextStyle(
-                        color: Color(0xFFDADADA),
-                        fontStyle: FontStyle.italic,
-                      ),
-                      suffixIcon: isPassword ? IconButton(onPressed: () {
-                        switch(passwordType) {
-                          case PasswordType.password:
-                            context.read<FormController>().showPassword();
-                          case PasswordType.confirmPassword:
-                            context.read<FormController>().showConfirmPassword();
-                        }
-                      }, icon: Icon(showPassword(context) ? Icons.visibility : Icons.visibility_off)) : null,
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                          borderSide: BorderSide(
-                            strokeAlign: 0,
-                            color: Colors.white,
-                          )
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: Colors.transparent,
-                          )
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: isDate ? Colors.transparent : Colors.grey,
-                          )
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                          borderSide: BorderSide(
-                            strokeAlign: 0,
-                            color: Colors.transparent,
-                          )
-                      )
-                  ),
+                    fillColor: Color(0xFFF5F5F5),
+                    prefixIcon: prefixIcon,
+                    prefixIconColor: Colors.grey,
+                    focusColor: Colors.grey,
+                    suffixIconColor: Colors.grey,
+                    hintText: isDate ? "dd/MM/yyyy" : label,
+                    hintStyle: TextStyle(
+                      color: Color(0xFFDADADA),
+                      fontStyle: FontStyle.italic,
+                    ),
+                    suffixIcon: isPassword ? IconButton(onPressed: () {
+                      switch(passwordType) {
+                        case PasswordType.password:
+                          context.read<FormController>().showPassword();
+                        case PasswordType.confirmPassword:
+                          context.read<FormController>().showConfirmPassword();
+                      }
+                    }, icon: Icon(showPassword(context) ? Icons.visibility : Icons.visibility_off)) : null,
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        borderSide: BorderSide(
+                          strokeAlign: 0,
+                          color: Colors.white,
+                        )
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: Colors.transparent,
+                        )
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: isDate ? Colors.transparent : Colors.grey,
+                        )
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        borderSide: BorderSide(
+                          strokeAlign: 0,
+                          color: Colors.transparent,
+                        )
+                    )
                 ),
               ),
             ),

@@ -4,33 +4,35 @@
 
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 TrainingData trainingDataFromJson(String str) => TrainingData.fromJson(json.decode(str));
 
 String trainingDataToJson(TrainingData data) => json.encode(data.toJson());
 
 class TrainingData {
-    String id;
-    String nama;
-    String namaTrainer;
-    int kapasitas;
-    int kapasitasTersisa;
-    String tipe;
-    String deskripsi;
-    DateTime tanggal;
-    int durasi;
-    String status;
+    String? id;
+    String? nama;
+    String? namaTrainer;
+    int? kapasitas;
+    int? kapasitasTersisa;
+    String? tipe;
+    String? deskripsi;
+    DateTime? tanggal;
+    int? durasi;
+    String? status;
 
     TrainingData({
-        required this.id,
-        required this.nama,
-        required this.namaTrainer,
-        required this.kapasitas,
-        required this.kapasitasTersisa,
-        required this.tipe,
-        required this.deskripsi,
-        required this.tanggal,
-        required this.durasi,
-        required this.status,
+         this.id,
+         this.nama,
+         this.namaTrainer,
+         this.kapasitas,
+        this.kapasitasTersisa = 0,
+         this.tipe,
+         this.deskripsi,
+         this.tanggal,
+         this.durasi,
+         this.status,
     });
 
     factory TrainingData.fromJson(Map<String, dynamic> json) => TrainingData(
@@ -54,8 +56,36 @@ class TrainingData {
         "kapasitas_tersisa": kapasitasTersisa,
         "tipe": tipe,
         "deskripsi": deskripsi,
-        "tanggal": tanggal.toIso8601String(),
+        "tanggal": tanggal?.toIso8601String() ?? "",
         "durasi": durasi,
         "status": status,
     };
+
+    TrainingData copyWith({
+        String? id,
+        String? nama,
+        String? namaTrainer,
+        int? kapasitas,
+        int? kapasitasTersisa,
+        String? tipe,
+        String? deskripsi,
+        DateTime? tanggal,
+        int? durasi,
+        String? status,
+    }) {
+        return TrainingData(
+            id: id ?? this.id,
+            nama: nama ?? this.nama,
+            namaTrainer: namaTrainer ?? this.namaTrainer,
+            kapasitas: kapasitas ?? this.kapasitas,
+            kapasitasTersisa: kapasitasTersisa ?? this.kapasitasTersisa,
+            tipe: tipe ?? this.tipe,
+            deskripsi:deskripsi ?? this.deskripsi,
+            tanggal: tanggal ?? this.tanggal,
+            durasi: durasi ?? this.durasi,
+            status: status ?? this.status,
+
+        );
+    }
+
 }

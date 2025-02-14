@@ -3,10 +3,12 @@ import 'package:cimb_growthhub_app/bloc/auth/auth_bloc.dart';
 import 'package:cimb_growthhub_app/model/request/register.dart';
 import 'package:cimb_growthhub_app/ui/login/component/custom_text_field.dart';
 import 'package:cimb_growthhub_app/ui/login/controller/form_controller.dart';
+import 'package:cimb_growthhub_app/ui/main/controller/main_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -20,12 +22,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
 
-    TextEditingController name = context.read<FormController>().nameTextEditingContoller;
-    TextEditingController email = context.read<FormController>().emailTextEditingContoller;
+    TextEditingController name = context.read<FormController>().nameTextEditingController;
+    TextEditingController email = context.read<FormController>().emailTextEditingController;
     TextEditingController username = context.read<FormController>().usernameTextEditingController;
     TextEditingController phone = context.read<FormController>().phoneTextEditingController;
-    TextEditingController job = context.read<FormController>().jobTextEditingContoller;
-    TextEditingController office = context.read<FormController>().offficeTextEditingContoller;
+    TextEditingController date = context.read<FormController>().dateTextEditingController;
+    TextEditingController job = context.read<FormController>().jobTextEditingController;
+    TextEditingController office = context.read<FormController>().officeTextEditingController;
     TextEditingController password = context.read<FormController>().passwordTextEditingController;
     TextEditingController konfirmasi = context.read<FormController>().konfirmPasswordTextEditingController;
 
@@ -126,7 +129,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(height: 15,),
                     CustomTextFormField(controller: phone, label: "No. Telepon", prefixIcon: Icon(Icons.call), formatter: [FilteringTextInputFormatter.digitsOnly],),
                     SizedBox(height: 15,),
-                    CustomTextFormField(label:  "Tanggal Lahir", prefixIcon: Icon(Icons.date_range), formatter: [FilteringTextInputFormatter.digitsOnly], isDate: true,),
+                    CustomTextFormField(controller: date, label:  "Tanggal Lahir", prefixIcon: Icon(Icons.date_range), isDate: true,
+                      onDataChanged: (value) {
+                        date.text = DateFormat("dd/MM/yyyy").format(value ?? DateTime.now());
+                        context.read<FormController>().changeDate(value ?? DateTime.now());
+                      },
+                    ),
                     SizedBox(height: 15,),
                     CustomTextFormField(controller: job, label: "Pekerjaan", prefixIcon: Icon(Icons.work_outline)),
                     SizedBox(height: 15,),
@@ -146,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               username: username.text, 
                               password: password.text, 
                               nama: name.text, 
-                              tglLahir: DateTime.now(), 
+                              tglLahir: context.read<FormController>().date,
                               pekerjaan: job.text, 
                               perusahaan: office.text, 
                               noTelepon:phone.text,

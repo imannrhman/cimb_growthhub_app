@@ -31,7 +31,7 @@ final router = GoRouter(
           ],
           child: MultiBlocProvider(
             providers: [
-                BlocProvider<MyTrainingBloc>(create: (context) => MyTrainingBloc()..add(GetMyTrainingData()),),
+                BlocProvider<MyTrainingBloc>(create: (context) => MyTrainingBloc(TrainingRepositoryAPI())..add(GetMyTrainingData()),),
                 BlocProvider<TrainingBloc>(create: (context) => TrainingBloc(TrainingRepositoryAPI())..add(GetTrainingData()),)
             ],
             child: MainScreen()),
@@ -43,9 +43,10 @@ final router = GoRouter(
 
        GoRoute(
           name: 'training',
-          path: '/training',
+         path: '/training',
           pageBuilder: (context, state) {
-            String id = "id";
+            String trainingId = state.uri.queryParameters['training_id'] ?? '';
+            String enrolledId = state.uri.queryParameters['enroll_id'] ?? '';
             return CustomTransitionPage(
             key: state.pageKey,
             child: MultiProvider(
@@ -53,11 +54,20 @@ final router = GoRouter(
                 ChangeNotifierProvider(
                   create: (context) => FormController(),
                 ),
+                ChangeNotifierProvider(
+                  create: (context) => MainController(),
+                ),
               ],
               child: MultiBlocProvider(providers: [
-                 BlocProvider<TrainingBloc>(create: (context) => TrainingBloc(TrainingRepositoryAPI())..add(GetTrainingDataByID(
-                  id: id
-                 )),)
+                if (enrolledId.isNotEmpty)
+                  BlocProvider<TrainingBloc>(create: (context) => TrainingBloc(TrainingRepositoryAPI())..add(GetEnrolledTraining(
+                      trainingId: trainingId,
+                      id: enrolledId,
+                  )),),
+                if (enrolledId.isEmpty)
+                  BlocProvider<TrainingBloc>(create: (context) => TrainingBloc(TrainingRepositoryAPI())..add(GetTrainingDataByID(
+                    id: trainingId,
+                  )),)
               ], child: TrainingScreen()
               ),
             ),
